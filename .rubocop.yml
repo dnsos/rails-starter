@@ -1,0 +1,50 @@
+# Prevent Rubocop and Prettier from clashing:
+inherit_from:
+  - node_modules/@prettier/plugin-ruby/rubocop.yml
+
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'db/migrate/**/*'
+    - 'db/schema.rb'
+    #- 'config/**/*'
+    - 'bin/**/*'
+    - 'node_modules/**/*'
+    - 'vendor/bundle/**/*' # only needed for GitHub Action to not get confused
+
+# Modified cops/rules
+Style/FrozenStringLiteralComment:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
+Layout/LineLength:
+  Enabled: false
+Style/GuardClause:
+  Enabled: false
+Naming/RescuedExceptionsVariableName:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: false
+Metrics/AbcSize:
+  Enabled: false
+Style/HashSyntax:
+  Enabled: false
+Naming/BlockForwarding:
+  Enabled: false
+Lint/MissingSuper:
+  Exclude:
+    - app/components/**/*
+Style/Documentation:
+  Exclude:
+    - app/components/**/*
+    - test/components/**/*
+Metrics/ParameterLists:
+  Exclude: 
+    - app/components/**/*
+Style/IfUnlessModifier:
+  Exclude:
+    - app/components/**/*
