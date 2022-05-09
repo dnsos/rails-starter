@@ -20,6 +20,6 @@ This repository contains a starter [template](https://guides.rubyonrails.org/rai
 
 - RenovateBot
 - .github/CODEOWNERS
-- GitHub Actions CI
+- GitHub Actions CI (shoudl actually be optional addition!)
 - Content Security Policy
 - Run Rubocop initially (some manual fixes may be necessary)
