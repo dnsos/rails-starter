@@ -183,7 +183,7 @@ after_bundle do
   # -------------------------------------------------------------------------
   # Set applications's timezone to Berlin
   # -------------------------------------------------------------------------
-  if yes?("Do you want to set the app's timezone to Berlin?") do
+  if yes?("Do you want to set the app's timezone to Berlin?")
     environment "config.time_zone = 'Berlin'"
   end
 
