@@ -2,14 +2,6 @@
 
 This repository contains a starter [template](https://guides.rubyonrails.org/rails_application_templates.html) for Ruby on Rails apps.
 
-**Attention: This is currently a work in progress!**
-
-**Open todo's**
-
-- [x] **make it possible to use this template remotely from GitHub**
-- [ ] ~~Default language to German (might require i18n gem and more work such as modifying and copying translations for default Rails content)~~ 
-- [x] refactor everything into a src/ folder
-
 ## Requirements
 
 - **Rails >= 7**. Older versions may work with at least some configurations of this template, but not guaranteed.
@@ -17,6 +9,8 @@ This repository contains a starter [template](https://guides.rubyonrails.org/rai
 - **TailwindCSS** for styling. Configure this easily by using the flag `--css=tailwind` when creating your Rails app with this template
 
 ## What does this template do?
+
+This template installs and configures some practical Rails defaults, see `template.rb` for details or the following overview.
 
 ### 👮 Linting and security tools
 
