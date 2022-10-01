@@ -167,7 +167,7 @@ after_bundle do
   # -------------------------------------------------------------------------
   # Configure preview layout for ViewComponent/Lookbook views
   # -------------------------------------------------------------------------
-  if yes?("Do you want to setup Lookbook for component?")
+  if yes?("Do you want to setup Lookbook for component development?")
     # -------------------------------------------------------------------------
     # Install ViewComponent and Lookbook for developing components in isolation
     # -------------------------------------------------------------------------
