@@ -5,7 +5,7 @@ def add_template_repository_to_source_path
   source_paths.unshift(File.dirname(__FILE__))
 end
 
-def add_gems
+def add_basic_gems
   # -------------------------------------------------------------------------
   # Install relevant code quality and security gems
   # -------------------------------------------------------------------------
@@ -18,32 +18,19 @@ def add_gems
   end
 
   # -------------------------------------------------------------------------
-  # Install letter_opener for receiving emails in dev mode
-  # -------------------------------------------------------------------------
-  gem_group :development do
-    gem 'letter_opener', '~> 1.8', '>= 1.8.1'
-  end
-
-  # -------------------------------------------------------------------------
   # Install SimpleCov for tracking test coverage
   # -------------------------------------------------------------------------
   gem_group :test do
     gem 'simplecov', require: false
   end
+end
 
-  # -------------------------------------------------------------------------
-  # Install ViewComponent and Lookbook for developing components in isolation
-  # -------------------------------------------------------------------------
-  gem 'view_component', '~> 2.52'
-  gem 'lookbook', '~> 0.8.0'
-
+def add_users
   # -------------------------------------------------------------------------
   # Install Devise for authentication
   # -------------------------------------------------------------------------
   gem 'devise', '~> 4.8', '>= 4.8.1'
-end
 
-def add_users
   # -------------------------------------------------------------------------
   # Basic Devise setup
   # -------------------------------------------------------------------------
@@ -53,7 +40,7 @@ def add_users
   # -------------------------------------------------------------------------
   # START: Compatibility fixes until Devise is compatible with Rails 7
   # -------------------------------------------------------------------------
-  copy_file 'turbo_devise_controller.rb', 'app/controllers/turbo_devise_controller.rb'
+  copy_file 'src/turbo_devise_controller.rb', 'app/controllers/turbo_devise_controller.rb'
 
   gsub_file 'config/initializers/devise.rb', '# config.parent_controller = \'DeviseController\'', '# config.parent_controller = \'TurboDeviseController\''
 
@@ -134,7 +121,7 @@ add_template_repository_to_source_path
 # -------------------------------------------------------------------------
 append_to_file 'Gemfile', "\n# The following gems are not included in Rails by default. They are part of the applied template"
 
-add_gems
+add_basic_gems
 
 after_bundle do
   # -------------------------------------------------------------------------
@@ -160,25 +147,45 @@ after_bundle do
   # -------------------------------------------------------------------------
   # Invoke authentication setup
   # -------------------------------------------------------------------------
-  add_users
-
-  # -------------------------------------------------------------------------
-  # Configure Lookbook route
-  # -------------------------------------------------------------------------
-  inject_into_file "config/routes.rb", "  # Lookbook route should be matched first\n  mount Lookbook::Engine, at: '/lookbook' if Rails.env.development?\n\n", after: "Rails.application.routes.draw do\n"
+  if yes?("Do you want to add authentication with Devise?")
+    add_users
+  end
 
   # -------------------------------------------------------------------------
   # Configure preview layout for ViewComponent/Lookbook views
   # -------------------------------------------------------------------------
-  copy_file 'component_preview.html.erb', 'app/views/layouts/component_preview.html.erb'
-  environment "config.view_component.default_preview_layout = 'component_preview'"
+  if yes?("Do you want to setup Lookbook for component?")
+    # -------------------------------------------------------------------------
+    # Install ViewComponent and Lookbook for developing components in isolation
+    # -------------------------------------------------------------------------
+    gem 'view_component', '~> 2.52'
+    gem 'lookbook', '~> 0.8.0'
 
-  # -------------------------------------------------------------------------
-  # Configure letter_opener in dev mode
-  # -------------------------------------------------------------------------
-  environment 'config.action_mailer.perform_deliveries = true', env: 'development'
-  environment 'config.action_mailer.delivery_method = :letter_opener', env: 'development'
-  inject_into_file "config/environments/development.rb", "# Let letter_opener handle emails in development\n", before: "config.action_mailer.delivery_method = :letter_opener"
+    # -------------------------------------------------------------------------
+    # Configure Lookbook route
+    # -------------------------------------------------------------------------
+    inject_into_file "config/routes.rb", "  # Lookbook route should be matched first\n  mount Lookbook::Engine, at: '/lookbook' if Rails.env.development?\n\n", after: "Rails.application.routes.draw do\n"
+
+    copy_file 'src/component_preview.html.erb', 'app/views/layouts/component_preview.html.erb'
+    environment "config.view_component.default_preview_layout = 'component_preview'"
+  end
+
+  if yes?("Do you want to configure letter_opener for handling mails in development mode?")
+     # -------------------------------------------------------------------------
+    # Install letter_opener for receiving emails in dev mode
+    # -------------------------------------------------------------------------
+    gem_group :development do
+      gem 'letter_opener', '~> 1.8', '>= 1.8.1'
+    end
+
+    # -------------------------------------------------------------------------
+    # Configure letter_opener in dev mode
+    # -------------------------------------------------------------------------
+    environment 'config.action_mailer.perform_deliveries = true', env: 'development'
+    environment 'config.action_mailer.delivery_method = :letter_opener', env: 'development'
+    inject_into_file "config/environments/development.rb", "# Let letter_opener handle emails in development\n", before: "config.action_mailer.delivery_method = :letter_opener"
+
+  end
 
   # -------------------------------------------------------------------------
   # Set applications's timezone to Berlin
@@ -221,7 +228,7 @@ after_bundle do
   # -------------------------------------------------------------------------
   # Fix all auto-correctable Rubocop violations
   # -------------------------------------------------------------------------
-  run 'bundle exec rubocop --auto-correct-all --fail-level error'
+  run 'bundle exec rubocop --autocorrect-all --fail-level error'
 
   # -------------------------------------------------------------------------
   # Correct all Ruby formatting via Prettier (silently)

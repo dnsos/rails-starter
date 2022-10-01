@@ -7,8 +7,8 @@ This repository contains a starter [template](https://guides.rubyonrails.org/rai
 **Open todo's**
 
 - [ ] **make it possible to use this template remotely from GitHub**
-- [ ] Default language to German (might require i18n gem and more work such as modifying and copying translations for default Rails content)
-- [ ] refactor everything into a src/ folder
+- [ ] ~~Default language to German (might require i18n gem and more work such as modifying and copying translations for default Rails content)~~ 
+- [x] refactor everything into a src/ folder
 
 ## Requirements
 
